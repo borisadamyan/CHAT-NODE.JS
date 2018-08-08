@@ -2,11 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="with=device-width, initial-scale=1, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <title>Join | Chat</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="centered-form">
+  <div class="leftSide-form__form">
+    <h3>Active Rooms</h3>
+    <div id="rooms"></div>
+  </div>
+
   <div class="centered-form__form">
     <form action="/chat.html" >
     <div class="form-field">
@@ -25,5 +30,13 @@
     </div>
     </form>
   </div>
+
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+          integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+          crossorigin="anonymous"></script>
+  <script src="js/deparam.js"></script>
+  <script src="js/index.js"></script>
 </body>
 </html>
