@@ -15,4 +15,4 @@ var someTime = moment().valueOf();
 console.log(someTime);
 
 var date = moment(someTime);
-console.log(date.format('h:mm a'))
+console.log(date.format('h:mm a'));
