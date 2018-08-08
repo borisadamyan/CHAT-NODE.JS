@@ -18,6 +18,7 @@ app.use(express.static(publicPath)); // connect to public/chat.html
 
 io.on('connection', (socket) => {
   console.log('New user connected');
+  io.emit('updateRoomsList', rooms.getRoomsList());
 /*
   socket.emit('newMessage', {
     from: 'user1',
