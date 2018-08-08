@@ -29,6 +29,14 @@ socket.on('connect', function ()  {
     }
   });
 });
+socket.on('updateUserList', function (users) {
+  var ol = $('<ol></ol>');
+  users.forEach(function (user) {
+    ol.append($('<li></li>').text(user));
+  });
+  $('#users').html(ol);
+  console.log(users);
+});
 socket.on('disconnect', function () {
   console.log('Disconnected from Server');
 });
@@ -73,7 +81,6 @@ socket.on('newMessage', function (message) {
    e.preventDefault();
    var messageTextbox = $('[name=message]');
    socket.emit('createMessage', {
-     from:'User',
      text: messageTextbox.val()
    }, function () {
      messageTextbox.val('');
