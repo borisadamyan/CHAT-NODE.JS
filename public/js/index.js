@@ -7,3 +7,9 @@ socket.on('updateRoomsList', function (rooms) {
   $('#rooms').html(ol);
   console.log('ROOMS', rooms);
 });
+
+$(document).on('click', '#rooms ol li', function () {
+  var roomName = $(this).html();
+  var messageTextbox = $('[name=room]');
+  messageTextbox.val(roomName);
+});

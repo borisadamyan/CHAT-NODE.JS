@@ -197,6 +197,12 @@ button:disabled {
 .message__title span {
   color: #999;
 }
+#rooms li {
+  cursor: pointer;
+}
+#rooms li:hover {
+  opacity: .8;
+}
 #exit{
   position: absolute;
   bottom: 30px;

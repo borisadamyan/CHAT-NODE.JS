@@ -31,8 +31,23 @@ io.on('connection', (socket) => {
     if(!isRealString(params.name) || !isRealString(params.room)){
       return callback('Name and Room name are required')
     }
-    rooms.addRoom(params.room);
-    io.emit('updateRoomsList', rooms.getRoomsList(params.room));
+      var roomList = rooms.getRoomsList();
+    if(roomList.length !== 0){
+      roomList.forEach((roomName) => {
+        if(roomName.name === params.room) {
+          console.log('ROOM EXIST');
+        }else {
+          rooms.addRoom(params.room);
+          io.emit('updateRoomsList', rooms.getRoomsList(params.room));
+        }
+      });
+    }else {
+      rooms.addRoom(params.room);
+      io.emit('updateRoomsList', rooms.getRoomsList(params.room));
+    }
+    console.log('Room List',roomList.length);
+
+
 
     socket.join(params.room);
     users.removeUser(socket.id);
@@ -73,10 +88,10 @@ io.on('connection', (socket) => {
       io.to(user.room).emit('updateUserList', users.getUserList(user.room));
       io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left`));
 
-
-      rooms.removeRoom(user.room);
-      console.log('User', user.room);
-      io.emit('updateRoomsList', rooms.getRoomsList());
+      if(users.getUserList(user.room).length === 0){
+        rooms.removeRoom(user.room);
+        io.emit('updateRoomsList', rooms.getRoomsList());
+      }
     }
     console.log('User was disconnected');
   });
