@@ -32,33 +32,53 @@ io.on('connection', (socket) => {
       return callback('Name and Room name are required')
     }
       var roomList = rooms.getRoomsList();
-    if(roomList.length !== 0){
+      if(roomList.length !== 0){
       roomList.forEach((roomName) => {
         if(roomName.name === params.room) {
           console.log('ROOM EXIST');
+          io.emit('getRoomName', rooms.getRoomName(params.room));
         }else {
           rooms.addRoom(params.room);
           io.emit('updateRoomsList', rooms.getRoomsList(params.room));
+          io.emit('getRoomName', rooms.getRoomName(params.room));
+
         }
       });
     }else {
       rooms.addRoom(params.room);
       io.emit('updateRoomsList', rooms.getRoomsList(params.room));
+      io.emit('getRoomName', rooms.getRoomName(params.room));
     }
-    console.log('Room List',roomList.length);
+
 
 
 
     socket.join(params.room);
     users.removeUser(socket.id);
-    users.addUser(socket.id, params.name, params.room);
-    io.to(params.room).emit('updateUserList', users.getUserList(params.room));
+
+    var userList = users.getUserList(params.room);
+    if(userList.length !== 0){
+      userList.forEach((userName) => {
+        if(userName !== params.name) {
+          users.addUser(socket.id, params.name, params.room);
+          io.to(params.room).emit('updateUserList', users.getUserList(params.room));
+
+        }else {
+          console.log('Username EXIST');
+          return callback('Name is exist')
+        }
+      });
+    }else {
+      users.addUser(socket.id, params.name, params.room);
+      io.to(params.room).emit('updateUserList', users.getUserList(params.room));
+    }
 
 
 
     socket.emit('newMessage', generateMessage('Admin', 'Welcome to Chat App'));
     socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} has joined`));
-    callback()
+    callback();
+
   });
 
 

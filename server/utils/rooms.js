@@ -18,7 +18,7 @@ class Rooms{
     console.log('Remove User', room);
     return room;
   }
-  getRooms(name){
+  getRoomName(name){
     return this.rooms.filter((room) =>  room.name === name)[0];
   }
   getRoomsList(){

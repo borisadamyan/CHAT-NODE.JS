@@ -30,13 +30,23 @@ socket.on('connect', function ()  {
   });
 });
 
+socket.on('getRoomName', function (room) {
+  console.log(room.name);
+  $('#roomTitle').text(room.name);
+});
+
 socket.on('updateUserList', function (users) {
   var ol = $('<ol></ol>');
   users.forEach(function (user) {
     ol.append($('<li></li>').text(user));
   });
   $('#users').html(ol);
+  $('#nowOnline').html(`Now Online ( ${users.length} )`);
   console.log(users);
+});
+socket.on('setRoomName', function (roomName) {
+  var roomTitle = $('#roomTitle');
+  roomTitle.html(roomName);
 });
 
 socket.on('disconnect', function () {
