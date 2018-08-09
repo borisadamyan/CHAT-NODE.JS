@@ -22,9 +22,11 @@ socket.on('connect', function ()  {
   var params = jQuery.deparam(window.location.search);
   socket.emit('join', params, function (err) {
     if(err){
+      $('#loader').show();
       alert(err);
       window.location.href = '/';
     }else {
+      $('#loader').hide();
       console.log('No error');
     }
   });
@@ -58,12 +60,14 @@ socket.on('newMessage', function (message) {
   var formatedTime = moment(message.createdAt).format('h:mm a');
   var template = $('#message-template').html();
   var html = Mustache.render(template, {
-    text: message.text,
     from: message.from,
     createdAt: formatedTime
   });
+
   $('#messages').append(html);
+  $('#messages .message:last-child .message__body p').append(message.text);
   scrollToBottom();
+
   /*console.log(message);
   var formatedTime = moment(message.createdAt).format('h:mm a');
   var li = $('<li></li>');
@@ -88,17 +92,22 @@ socket.on('newMessage', function (message) {
     li.append(a);
     $('#messages').append(li);*/
   });
-
+$('[name=message]').emojioneArea();
  $('#message-form').on('submit', function (e) {
    e.preventDefault();
    var messageTextbox = $('[name=message]');
    socket.emit('createMessage', {
-     text: messageTextbox.val()
+     text: $('.emojionearea-editor')[0].innerHTML
    }, function () {
      messageTextbox.val('');
+     $('.emojionearea-editor')[0].innerHTML = '';
    });
  });
-
+$(document).on('keydown', function (e) {
+  if(e.keyCode === 13){
+    $('#sendMessage').click();
+  }
+});
  var locationButton = $('#send-location');
   locationButton.on('click', function () {
    if(!navigator.geolocation){
